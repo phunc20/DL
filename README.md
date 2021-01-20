@@ -4,12 +4,4 @@ n-class classification. After the discussion, someone gave me the idea of writin
 on it, and after finishing the major part of that code, when I tried to push the code to
 my github, I just realized that I have no suitable repo to fit this kind of theme.
 
-That's the origin of this repo. In the future, from time to time, I will try to add sth here, maybe
-anything related to Deep Learning.
-
-
-
-
-
-
-
+That's the origin of this repo. In the future, from time to time, I will try to add more things here.
