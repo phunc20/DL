@@ -11,8 +11,16 @@
 不過至少, 第一步我們要瞭解這麼簡單的結構產生出的 backprop, 之後才適合討論更複雜的.
 
 ## 修正
-抱歉, 我一開始想用中文寫, 但後來發現自己 $\LaTeX$ 實在太弱了, 只好先用英文, 但是寫完以後, 發現花太多時間了,
-所以或許暫時不會有中文的版本. 主要是中文有些常用字我竟然顯示不出來, 只好先作罷了.
+抱歉, 我一開始想用中文寫, 但後來發現自己 $\LaTeX$ 實在太弱了, 只好先用英文 (`en_nn_andrew_ng.pdf`),
+但是寫完以後, 發現花太多時間了, 所以或許暫時不會有中文的版本.
+主要是中文有些常用字我的 xelatex 在 gentoo/artix 上竟然顯示不出來, 只好先作罷了.
+
+## Code
+Andrew Ng 的課程是有 code 的, 不過方便起見, 如果有人對於這個簡單的 neural network 的 code 該課程如何呈現有興趣的話,
+可以參考下列網址, 或者其他網址, 網路上應該不乏類似的分享, 畢竟是門當初相當受到歡迎的課.
+- [https://github.com/phunc20/deeplearning.ai/blob/main/dl/2019/01-neural_networks_deep_learning/03-shallow_neural_networks/02-programming_assignment/Planar%2Bdata%2Bclassification%2Bwith%2Bone%2Bhidden%2Blayer%2Bv5--phunc20.ipynb](https://github.com/phunc20/deeplearning.ai/blob/main/dl/2019/01-neural_networks_deep_learning/03-shallow_neural_networks/02-programming_assignment/Planar%2Bdata%2Bclassification%2Bwith%2Bone%2Bhidden%2Blayer%2Bv5--phunc20.ipynb)
+- [https://github.com/phunc20/deeplearning.ai/blob/main/dl/2019/01-neural_networks_deep_learning/03-shallow_neural_networks/02-programming_assignment/my_derived_formulae.ipynb](https://github.com/phunc20/deeplearning.ai/blob/main/dl/2019/01-neural_networks_deep_learning/03-shallow_neural_networks/02-programming_assignment/my_derived_formulae.ipynb)
+
 
 ## Todo
 01. Put in center the sentence "(Note that both sides of the equation are functions $M_{n,n_1} \to \mathbb{R}$)" in `en_nn_andrew_ng.tex`
