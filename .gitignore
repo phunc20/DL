@@ -1,0 +1,4 @@
+*.log
+*.aux
+*.toc
+backprop/en_nn_andrew_ng.tex
