@@ -12,3 +12,4 @@
 
 ## Todo
 01. Put in center the sentence "(Note that both sides of the equation are functions $M_{n,n_1} \to \mathbb{R}$)" in `en_nn_andrew_ng.tex`
+02. `gpg --encrypt --recipient wucf20@gmail.com en_nn_andrew_ng.tex`
