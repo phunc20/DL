@@ -1,4 +1,5 @@
 *.log
 *.aux
 *.toc
+*.out
 backprop/en_nn_andrew_ng.tex
