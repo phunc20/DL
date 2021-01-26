@@ -21,7 +21,3 @@ Andrew Ng 的課程是有 code 的, 不過方便起見, 如果有人對於這個
 - [https://github.com/phunc20/deeplearning.ai/blob/main/dl/2019/01-neural_networks_deep_learning/03-shallow_neural_networks/02-programming_assignment/Planar%2Bdata%2Bclassification%2Bwith%2Bone%2Bhidden%2Blayer%2Bv5--phunc20.ipynb](https://github.com/phunc20/deeplearning.ai/blob/main/dl/2019/01-neural_networks_deep_learning/03-shallow_neural_networks/02-programming_assignment/Planar%2Bdata%2Bclassification%2Bwith%2Bone%2Bhidden%2Blayer%2Bv5--phunc20.ipynb)
 - [https://github.com/phunc20/deeplearning.ai/blob/main/dl/2019/01-neural_networks_deep_learning/03-shallow_neural_networks/02-programming_assignment/my_derived_formulae.ipynb](https://github.com/phunc20/deeplearning.ai/blob/main/dl/2019/01-neural_networks_deep_learning/03-shallow_neural_networks/02-programming_assignment/my_derived_formulae.ipynb)
 
-
-## Todo
-01. Put in center the sentence "(Note that both sides of the equation are functions $M_{n,n_1} \to \mathbb{R}$)" in `en_nn_andrew_ng.tex`
-
