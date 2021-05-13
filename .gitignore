@@ -5,3 +5,9 @@
 *.swp
 backprop/en_nn_andrew_ng.tex
 backprop/twn_nn_andrew_ng.tex
+
+trash.*
+corbeille/
+
+.ipynb_checkpoints/
+.DS_Store
