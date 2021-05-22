@@ -9,5 +9,6 @@ backprop/twn_nn_andrew_ng.tex
 trash.*
 corbeille/
 
+__pycache__/
 .ipynb_checkpoints/
 .DS_Store
