@@ -1,6 +1,4 @@
 import numpy as np
-from sklearn.model_selection import StratifiedShuffleSplit
-
 
 JAN = 1
 FEB = 2
@@ -21,10 +19,10 @@ AUTUMN = 2
 WINTER = 3
 
 season_to_id = {
-    "spring": 0,
-    "summer": 1,
-    "autumn": 2,
-    "winter": 3,
+    "spring": SPRING,
+    "summer": SUMMER,
+    "autumn": AUTUMN,
+    "winter": WINTER,
 }
 
 SEED = 20
@@ -50,10 +48,11 @@ D_month_ndays = {
 }
 
 L_month_day = []
-for month in (JAN, FEB, MAR, APR, MAY, JUN, JUL, AUG, SEP, OCT, NOV, DEC,):
-    #L = [[month, i] for i in range(1, n_days_in(month)+1)]
+for month in range(JAN, DEC+1):
     L = [[month, i] for i in range(1, D_month_ndays[month]+1)]
     L_month_day.extend(L)
 
-X = np.array(L_month_day)
 
+granularity = 1
+latitudes = range(-89, 90, granularity)  # exclude -90 and 90, which have no longitude
+longitudes = range(-179, 180+1, granularity)
