@@ -56,3 +56,12 @@ for month in range(JAN, DEC+1):
 granularity = 1
 latitudes = range(-89, 90, granularity)  # exclude -90 and 90, which have no longitude
 longitudes = range(-179, 180+1, granularity)
+
+S = 0
+N = 1
+D_NSeason_SSeason = {
+    SUMMER: WINTER,
+    WINTER: SUMMER,
+    SPRING: AUTUMN,
+    AUTUMN: SPRING,
+}
