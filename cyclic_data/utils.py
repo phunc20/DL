@@ -65,7 +65,27 @@ def rule3(row):
         semisphere = S
     return jahreszeit(row.month, row.day, semisphere, rule=3)
 
-
-
+def draw_and_show(tree_clf):
+    pass
+#from sklearn.tree import export_graphviz
+#from graphviz import Source
+#from pathlib import Path
+#
+##out_file = Path("./tree.png")
+#out_dot = "./tmp.dot"
+#export_graphviz(
+#    tree_clf,
+#    out_file=out_dot,
+#    feature_names=df_train.columns,
+#    class_names=["spring", "summer", "autumn", "winter"],
+#    rounded=True,
+#    filled=True,
+#)
+#
+#out_png = ".".join(out_dot.split(".")[:-1] + ["png"])
+#!dot -Tpng $(out_file) -o $out_png
+#from IPython.display import Image
+#Image(filename="tree_cyclic.png", width=400)
+##Source.from_file(out_dot)
 
 
