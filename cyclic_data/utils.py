@@ -88,4 +88,48 @@ def draw_and_show(tree_clf):
 #Image(filename="tree_cyclic.png", width=400)
 ##Source.from_file(out_dot)
 
+def cyclicize_number_mom_son(number_mom,
+                             max_mom,
+                             min_mom,
+                             number_son,
+                             max_son,
+                             min_son
+    ):
+    """
+    args
+        number, int
+            \in {min_, min_ + 1, ..., max_}
+            e.g. hour => min_ = 0, max_ = 24
+                 longitude => min_ = -180, max_ = 180
+        max_, int
+        min_, int
+    return
+        (x, y), tuple of float
+    """
+    period_mom = max_mom - min_mom
+    sep_mom = 2 * np.pi / period_mom
+    theta_mom = sep_mom * number_mom
+    period_son = max_son - min_son
+    sep_son = sep_mom / period_son
+    theta_son = sep_son * number_son
+    theta = theta_mom + theta_son
+    x = np.cos(theta)
+    y = np.sin(theta)
+    return x, y
 
+def cyclicize_series_mom_son(series):
+    """
+    args
+        series, pd.Series or ndarray
+    """
+    res = np.empty((series.shape[0], 2))
+    for i, (month, day) in enumerate(series):
+        x, y = cyclicize_number_mom_son(
+                   month,
+                   12,
+                   0,
+                   day,
+                   D_month_ndays[month],
+                   0)
+        res[i] = x, y
+    return res
