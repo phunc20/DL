@@ -100,6 +100,22 @@ not differentiable), but (no matter how hard we rotate and zoom) it seems a litt
 difficult to show the unsmooth places.
 """
 
+# ╔═╡ 5d529c6b-085d-4fe8-81e0-86713411c606
+let
+  ws = range(-10, 13, length=500)
+  bs = range(-10, 0, length=500)
+  zs = [loss(w, b) for w in ws, b in bs]
+  Plots.surface(ws, bs, zs)
+end
+
+# ╔═╡ 7e10085c-e0a4-4db6-bc9a-b1fa4327679c
+let
+  ws = range(-10, 10, length=500)
+  bs = range(-10, 0, length=500)
+  zs = [loss(w, b) for w in ws, b in bs]
+  Plots.contour(ws, bs, zs)
+end
+
 # ╔═╡ 70508cc6-d203-11ec-1a1f-2513a1629210
 md"""
 ## Convexity
@@ -134,6 +150,9 @@ It seems that most NNs are convex functions of input the weights and biases and 
 
 So in a sense we are doing convex optimization when we train NNs.
 """
+
+# ╔═╡ bf03bd59-c775-4c5e-bd6b-41a154efaad0
+
 
 # ╔═╡ 00000000-0000-0000-0000-000000000001
 PLUTO_PROJECT_TOML_CONTENTS = """
@@ -1387,8 +1406,11 @@ version = "0.9.1+5"
 # ╠═630085f4-d3ee-433e-9342-77186c697b8f
 # ╠═fdb37a3a-5740-4ed3-aa37-59fca2483f21
 # ╟─a488df85-7a43-4fb2-8bb3-46a2153de342
+# ╠═5d529c6b-085d-4fe8-81e0-86713411c606
+# ╠═7e10085c-e0a4-4db6-bc9a-b1fa4327679c
 # ╟─70508cc6-d203-11ec-1a1f-2513a1629210
-# ╟─fba16a18-f2ce-40ee-bf83-6205fdfe57f5
+# ╠═fba16a18-f2ce-40ee-bf83-6205fdfe57f5
 # ╟─73c09563-43e8-4358-9f3a-8b66f621bdd4
+# ╠═bf03bd59-c775-4c5e-bd6b-41a154efaad0
 # ╟─00000000-0000-0000-0000-000000000001
 # ╟─00000000-0000-0000-0000-000000000002
