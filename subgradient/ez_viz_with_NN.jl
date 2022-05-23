@@ -1,5 +1,5 @@
 ### A Pluto.jl notebook ###
-# v0.19.4
+# v0.19.5
 
 using Markdown
 using InteractiveUtils
@@ -152,7 +152,16 @@ So in a sense we are doing convex optimization when we train NNs.
 """
 
 # ╔═╡ bf03bd59-c775-4c5e-bd6b-41a154efaad0
-
+md"""
+- related links
+  - <https://www.youtube.com/watch?v=OMDn66kM9Qc>
+  - <https://fluxml.ai/Flux.jl/stable/training/training/>
+  - <https://fluxml.ai/Flux.jl/stable/training/optimisers/>
+  - <https://juliaml.github.io/MLDatasets.jl/dev/>
+  - <https://juliaml.github.io/MLDatasets.jl/stable/datasets/vision/>
+- less related links
+  - <https://fluxml.ai/Flux.jl/stable/models/nnlib/>
+"""
 
 # ╔═╡ 00000000-0000-0000-0000-000000000001
 PLUTO_PROJECT_TOML_CONTENTS = """
@@ -1411,6 +1420,6 @@ version = "0.9.1+5"
 # ╟─70508cc6-d203-11ec-1a1f-2513a1629210
 # ╠═fba16a18-f2ce-40ee-bf83-6205fdfe57f5
 # ╟─73c09563-43e8-4358-9f3a-8b66f621bdd4
-# ╠═bf03bd59-c775-4c5e-bd6b-41a154efaad0
+# ╟─bf03bd59-c775-4c5e-bd6b-41a154efaad0
 # ╟─00000000-0000-0000-0000-000000000001
 # ╟─00000000-0000-0000-0000-000000000002
