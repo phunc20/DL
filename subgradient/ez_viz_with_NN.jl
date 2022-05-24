@@ -1,5 +1,5 @@
 ### A Pluto.jl notebook ###
-# v0.19.5
+# v0.19.4
 
 using Markdown
 using InteractiveUtils
@@ -19,6 +19,9 @@ end
 begin
     using MLDatasets
 end
+
+# ╔═╡ 3c7f219e-d302-4b27-a0c5-ead833e46522
+using Flux: train!
 
 # ╔═╡ 464ce01f-88b4-4fe0-8e84-03e5d3274c8c
 Pkg.status()
@@ -136,14 +139,15 @@ let
   x = [-1, 0, 1]
   y = [-1, 0, 0]
   Plots.plot(x, y,
-       title=L"y = \min\{x, 0\}",
+       #title=L"y = \min\{x, 0\}",
+       title="y = min{x, 0}",
        xlims=(-1, 1),
        ylims=(-1, 1),
        linewidth=3,
        label=nothing,
        #aspect_ratio=:equal,
-       xlabel=L"x",
-       ylabel=L"y",
+       xlabel="x",
+       ylabel="y",
   )
 end
 
@@ -178,6 +182,97 @@ convex_model = Chain(
     Dense(64 => 64, relu),
     Dense(64 => 10),
 )
+
+# ╔═╡ cd445964-09cc-497e-ae6a-b68049fa96ea
+mnist = Dict(
+  "train" => MNIST(:train),
+  "test" => MNIST(:test),
+)
+
+# ╔═╡ 40388282-a16c-4b44-bbb0-eede89e9f04b
+mnist["train"].targets
+
+# ╔═╡ 0a66837a-51fa-463b-9a3b-1d851195be3c
+typeof(mnist["train"].features)
+
+# ╔═╡ 426bbf11-a385-454e-b515-bd8cfa084614
+begin
+  old_train_shape = size(mnist["train"].features)
+  old_test_shape = size(mnist["test"].features)
+  # This won't work: cannot overwrite
+  #mnist["train"].features = reshape(mnist["train"].features, (:, old_train_shape[end]))
+  #mnist["test"].features = reshape(mnist["test"].features, :, old_test_shape[end])
+  our_X_train = reshape(mnist["train"].features, (:, old_train_shape[end]))
+  our_y_train = Flux.onehotbatch(mnist["train"].targets, 0:9)
+  our_X_test = reshape(mnist["test"].features, (:, old_test_shape[end]))
+  our_y_test = Flux.onehotbatch(mnist["test"].targets, 0:9)
+  our_mnist = Dict(
+      "train" => (our_X_train, our_y_train),
+      "test" => (our_X_test, our_y_test),
+    )
+end
+
+# ╔═╡ 1a75395b-a297-419c-9132-cd4031f8a053
+#perte = Flux.logitcrossentropy
+perte(x, y) = Flux.logitcrossentropy(convex_model(x), y)
+
+# ╔═╡ 5a2b3837-0a5b-48b3-9bae-cc06895294e8
+convex_params = Flux.params(convex_model)
+
+# ╔═╡ 5f24878e-c861-4ffa-8c08-3a39e533eab4
+opt = Flux.Optimise.Descent()
+
+# ╔═╡ a0d4d2c9-9a71-4445-856f-52db5f4f6632
+perte(our_mnist["train"]...), perte(our_mnist["test"]...)
+
+# ╔═╡ 144b5422-028e-46cf-836f-0b4d049e2a25
+for epoch in 1:50
+  train!(perte, convex_params, [our_mnist["train"]], opt)
+end
+
+# ╔═╡ 2d528e08-a111-46a7-a4b8-03c0267bd784
+perte(our_mnist["train"]...), perte(our_mnist["test"]...)
+
+# ╔═╡ c456e3ca-7a4a-4709-a593-51f05ae47453
+md"""
+> We need a performance metric here.
+"""
+
+# ╔═╡ 562378cc-ee0e-4456-86d7-4f5a81ba7ace
+convex_model(our_mnist["train"][1])
+
+# ╔═╡ 98e9f9d1-61ae-4135-a2d7-9820d7458879
+argmax(convex_model(our_mnist["train"][1]); dims=1)
+
+# ╔═╡ 9fa6f3fe-ea23-4fad-bb88-7b2c917e05e0
+mnist["train"].targets
+
+# ╔═╡ 2af44375-33bd-4c6d-968f-1cbcbaf94213
+concave_model = Chain(
+    Dense(28*28 => 64, lulu),
+    Dense(64 => 64, lulu),
+    Dense(64 => 10),
+)
+
+# ╔═╡ e648f3c2-fcc7-4f3d-a999-363d6386fe0e
+concave_params = Flux.params(concave_model)
+
+# ╔═╡ 0da68201-be92-4b35-92a0-c80163c53e77
+concave_opt = Flux.Optimise.Descent()
+
+# ╔═╡ 7d770716-2846-46c2-ac4c-8b24d613d450
+concave_perte(x, y) = Flux.logitcrossentropy(concave_model(x), y)
+
+# ╔═╡ 8337eca4-1fff-45c2-abf4-c91ec4c130b3
+concave_perte(our_mnist["train"]...), concave_perte(our_mnist["test"]...)
+
+# ╔═╡ 6c1b0362-9a6f-489e-b949-df78fbd54818
+for epoch in 1:20
+  train!(concave_perte, concave_params, [our_mnist["train"]], concave_opt)
+end
+
+# ╔═╡ b1a81c7b-4eba-473b-a055-a6b2b1c6b941
+concave_perte(our_mnist["train"]...), concave_perte(our_mnist["test"]...)
 
 # ╔═╡ 00000000-0000-0000-0000-000000000001
 PLUTO_PROJECT_TOML_CONTENTS = """
@@ -1688,5 +1783,27 @@ version = "0.9.1+5"
 # ╠═bf03bd59-c775-4c5e-bd6b-41a154efaad0
 # ╠═e594e364-361c-474f-8860-79e5d2c1612b
 # ╠═72dc6e59-8aec-4548-8430-aa742e0ce3b4
+# ╠═cd445964-09cc-497e-ae6a-b68049fa96ea
+# ╠═40388282-a16c-4b44-bbb0-eede89e9f04b
+# ╠═0a66837a-51fa-463b-9a3b-1d851195be3c
+# ╠═426bbf11-a385-454e-b515-bd8cfa084614
+# ╠═1a75395b-a297-419c-9132-cd4031f8a053
+# ╠═5a2b3837-0a5b-48b3-9bae-cc06895294e8
+# ╠═5f24878e-c861-4ffa-8c08-3a39e533eab4
+# ╠═a0d4d2c9-9a71-4445-856f-52db5f4f6632
+# ╠═3c7f219e-d302-4b27-a0c5-ead833e46522
+# ╠═144b5422-028e-46cf-836f-0b4d049e2a25
+# ╠═2d528e08-a111-46a7-a4b8-03c0267bd784
+# ╟─c456e3ca-7a4a-4709-a593-51f05ae47453
+# ╠═562378cc-ee0e-4456-86d7-4f5a81ba7ace
+# ╠═98e9f9d1-61ae-4135-a2d7-9820d7458879
+# ╠═9fa6f3fe-ea23-4fad-bb88-7b2c917e05e0
+# ╠═2af44375-33bd-4c6d-968f-1cbcbaf94213
+# ╠═e648f3c2-fcc7-4f3d-a999-363d6386fe0e
+# ╠═0da68201-be92-4b35-92a0-c80163c53e77
+# ╠═7d770716-2846-46c2-ac4c-8b24d613d450
+# ╠═8337eca4-1fff-45c2-abf4-c91ec4c130b3
+# ╠═6c1b0362-9a6f-489e-b949-df78fbd54818
+# ╠═b1a81c7b-4eba-473b-a055-a6b2b1c6b941
 # ╟─00000000-0000-0000-0000-000000000001
 # ╟─00000000-0000-0000-0000-000000000002
