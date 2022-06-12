@@ -13,13 +13,13 @@ begin
   using Random
   using LaTeXStrings
   #using GLMakie
-  using MLJ
 end
 
 # ╔═╡ e594e364-361c-474f-8860-79e5d2c1612b
-begin
-    using MLDatasets
-end
+using MLDatasets
+
+# ╔═╡ 62e0fe95-3105-4978-be67-35f2043ea299
+using MLJ
 
 # ╔═╡ 3c7f219e-d302-4b27-a0c5-ead833e46522
 using Flux: train!
@@ -224,28 +224,59 @@ end
 
 # ╔═╡ 1a75395b-a297-419c-9132-cd4031f8a053
 #perte = Flux.logitcrossentropy
-perte(x, y) = Flux.logitcrossentropy(convex_model(x), y)
+convex_perte(x, y) = Flux.logitcrossentropy(convex_model(x), y)
+
+# ╔═╡ 4c8e1df0-ade9-403c-a950-18f9994b7f50
+md"""
+#### Performance Measures
+Let's record the losses and accuracies during training.
+"""
+
+# ╔═╡ 07ceb827-a2ab-4a77-a9fc-271a4d7a3ab9
+accuracy(ŷ, y) = Accuracy()(ŷ, y)
+
+# ╔═╡ 50ed7be0-58f1-4f4d-a8f6-f72d19d7f0a1
+function acc(ŷ_logits, y_logits)
+  ŷ = argmax(ŷ_logits, dims=1)
+  y = argmax(y_logits, dims=1)
+  accuracy(ŷ, y)
+end
 
 # ╔═╡ 5a2b3837-0a5b-48b3-9bae-cc06895294e8
 convex_params = Flux.params(convex_model)
 
 # ╔═╡ 5f24878e-c861-4ffa-8c08-3a39e533eab4
-opt = Flux.Optimise.Descent()
+convex_opt = Flux.Optimise.Descent()
 
 # ╔═╡ a0d4d2c9-9a71-4445-856f-52db5f4f6632
-perte(our_mnist["train"]...), perte(our_mnist["test"]...)
+convex_perte(our_mnist["train"]...), convex_perte(our_mnist["test"]...)
 
 # ╔═╡ d0db793f-d4cd-4843-b3d1-70feeda71e01
 convex_perf = Dict(
-  "acc" => [],
-  "loss" => [],
+  "train" => Dict(
+      "acc" => [],
+      "loss" => [],
+    ),
+  "test" => Dict(
+      "acc" => [],
+      "loss" => [],
+    ),
 )
+
+# ╔═╡ ae01d402-3747-42ad-ae6c-f756ec09c0b7
+n_epochs = 20
+
+# ╔═╡ 144b5422-028e-46cf-836f-0b4d049e2a25
+for epoch in 1:n_epochs
+  train!(convex_perte, convex_params, [our_mnist["train"]], convex_opt)
+  for type in ("train", "test")
+    push!(convex_perf[type]["acc"], acc(convex_model(our_mnist[type][1]), our_mnist[type][2]))
+    push!(convex_perf[type]["loss"], convex_perte(our_mnist[type]...))
+  end
+end
 
 # ╔═╡ dae73759-045e-4078-8f6a-da226f685995
 convex_perf
-
-# ╔═╡ 2d528e08-a111-46a7-a4b8-03c0267bd784
-perte(our_mnist["train"]...), perte(our_mnist["test"]...)
 
 # ╔═╡ c456e3ca-7a4a-4709-a593-51f05ae47453
 md"""
@@ -282,9 +313,24 @@ concave_perte(our_mnist["train"]...), concave_perte(our_mnist["test"]...)
 
 # ╔═╡ dcb47ed1-ada8-4292-af3c-dd2189e3677d
 concave_perf = Dict(
-  "acc" => [],
-  "loss" => [],
+  "train" => Dict(
+      "acc" => [],
+      "loss" => [],
+    ),
+  "test" => Dict(
+      "acc" => [],
+      "loss" => [],
+    ),
 )
+
+# ╔═╡ 6c1b0362-9a6f-489e-b949-df78fbd54818
+for epoch in 1:n_epochs
+  train!(concave_perte, concave_params, [our_mnist["train"]], concave_opt)
+  for type in ("train", "test")
+    push!(concave_perf[type]["acc"], acc(concave_model(our_mnist[type][1]), our_mnist[type][2]))
+    push!(concave_perf[type]["loss"], concave_perte(our_mnist[type]...))
+  end
+end
 
 # ╔═╡ 4c550ed7-d4d9-452c-afef-fac923454fde
 concave_perf
@@ -301,7 +347,7 @@ md"""
 #measures()
 
 # ╔═╡ e8658b74-51cf-48fe-80bd-310c47ac05ac
-accuracy(ŷ, y) = Accuracy()(ŷ, y)
+#accuracy(ŷ, y) = Accuracy()(ŷ, y)
 
 # ╔═╡ 1cb258c9-d9f7-4955-b38c-658d4c5b5349
 our_mnist["train"]
@@ -325,29 +371,13 @@ accuracy([[0.1, 0.01, 0.001], [1, 3, 15]], [1,2])
 accuracy([[0.1, 0.01, 0.001], [1, 3, 15]], [[1,0.1,0.1], [0.1, 900, 0.01]])
 
 # ╔═╡ eae642ab-7b9c-40e2-9b3d-32989c1b8b7d
-function acc(ŷ_logits, y_logits)
-  #ŷ = [row for (row, col) in argmax(ŷ_logits, dims=1)]
-  #y = [row for (row, col) in argmax(y_logits, dims=1)]
-  ŷ = argmax(ŷ_logits, dims=1)
-  y = argmax(y_logits, dims=1)
-  accuracy(ŷ, y)
-end
-
-# ╔═╡ 144b5422-028e-46cf-836f-0b4d049e2a25
-for epoch in 1:50
-  train!(perte, convex_params, [our_mnist["train"]], opt)
-  push!(convex_perf["acc"], acc(
-	  convex_model(our_mnist["train"][1]), our_mnist["train"][2]))
-  push!(convex_perf["loss"], perte(our_mnist["train"]...))
-end
-
-# ╔═╡ 6c1b0362-9a6f-489e-b949-df78fbd54818
-for epoch in 1:50
-  train!(concave_perte, concave_params, [our_mnist["train"]], concave_opt)
-  push!(concave_perf["acc"], acc(
-    concave_model(our_mnist["train"][1]), our_mnist["train"][2]))
-  push!(concave_perf["loss"], concave_perte(our_mnist["train"]...))
-end
+# function acc(ŷ_logits, y_logits)
+#   #ŷ = [row for (row, col) in argmax(ŷ_logits, dims=1)]
+#   #y = [row for (row, col) in argmax(y_logits, dims=1)]
+#   ŷ = argmax(ŷ_logits, dims=1)
+#   y = argmax(y_logits, dims=1)
+#   accuracy(ŷ, y)
+# end
 
 # ╔═╡ f023c068-1441-4055-8888-c66d23f88c10
 acc(convex_model(our_mnist["train"][1]), our_mnist["train"][2])
@@ -2118,14 +2148,18 @@ version = "0.9.1+5"
 # ╠═0a66837a-51fa-463b-9a3b-1d851195be3c
 # ╠═426bbf11-a385-454e-b515-bd8cfa084614
 # ╠═1a75395b-a297-419c-9132-cd4031f8a053
+# ╠═4c8e1df0-ade9-403c-a950-18f9994b7f50
+# ╠═62e0fe95-3105-4978-be67-35f2043ea299
+# ╠═07ceb827-a2ab-4a77-a9fc-271a4d7a3ab9
+# ╠═50ed7be0-58f1-4f4d-a8f6-f72d19d7f0a1
 # ╠═5a2b3837-0a5b-48b3-9bae-cc06895294e8
 # ╠═5f24878e-c861-4ffa-8c08-3a39e533eab4
 # ╠═a0d4d2c9-9a71-4445-856f-52db5f4f6632
 # ╠═3c7f219e-d302-4b27-a0c5-ead833e46522
 # ╠═d0db793f-d4cd-4843-b3d1-70feeda71e01
+# ╠═ae01d402-3747-42ad-ae6c-f756ec09c0b7
 # ╠═144b5422-028e-46cf-836f-0b4d049e2a25
 # ╠═dae73759-045e-4078-8f6a-da226f685995
-# ╠═2d528e08-a111-46a7-a4b8-03c0267bd784
 # ╟─c456e3ca-7a4a-4709-a593-51f05ae47453
 # ╠═562378cc-ee0e-4456-86d7-4f5a81ba7ace
 # ╠═98e9f9d1-61ae-4135-a2d7-9820d7458879
