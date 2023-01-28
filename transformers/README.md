@@ -19,3 +19,5 @@
     - <https://twitter.com/giffmana/status/1615499959352139778?cxt=HBwWhIC9veuptOssAAAA&cn=ZmxleGlibGVfcmVjcw%3D%3D&refsrc=email>
 - Hugging Face
     - <https://huggingface.co/blog/how-to-generate>
+- Lilian Weng
+    - <https://lilianweng.github.io/posts/2018-06-24-attention/>
